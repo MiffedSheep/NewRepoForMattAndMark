@@ -33,10 +33,24 @@ public class GameControllerScript2 : MonoBehaviour
 	public GUIStyle scoreButton;
 	//RAYCASTING UGH
 	RaycastHit hit;
-	public int xToShootRayFrom1;
-	public int yToShootRayFrom1;
-	public int xToShootRayFrom2;
-	public int yToShootRayFrom2;
+	public float xToShootRayFrom1,xToShootRayFrom3;
+	public float yToShootRayFrom1,yToShootRayFrom3;
+	public float xToShootRayFrom2,xToShootRayFrom4;
+	public float yToShootRayFrom2,yToShootRayFrom4;
+	public Vector3 directionToShoot;
+	public int numberOfSameColorCubes;
+	public Color colorOfLastCubeHit;
+	public bool firstRay1 = true;
+	public bool firstRay2 = true;
+	public float hitX, hitY;
+	public int numCubesHit;
+	public LayerMask cyan=8;
+	public LayerMask black=9;
+	public LayerMask white=10;
+	public LayerMask red=11;
+	public LayerMask green=12;
+	public LayerMask yellow=13;
+	public int anotherX, anotherY;
 	//Game Phase Related
 	public float timer;
 	public float timeActionPhase = 4f;
@@ -119,8 +133,7 @@ public class GameControllerScript2 : MonoBehaviour
 		timer += Time.deltaTime;
 		UpdatePusherCubes ();
 		ProcessKeyboardInput ();
-		CastRayFromPusher1 ();
-		CastRayFromPusher2 ();
+		ShootDemRays();
 //		if(itIsNowTheActionPhase){
 //			canClickCubes=true;
 //		}
@@ -525,62 +538,77 @@ public class GameControllerScript2 : MonoBehaviour
 		
 	}
 
-	void ParentSomeCubes ()
-	{
-		GameObject[] children;
-		
-	}
+//	void ParentSomeCubes ()
+//	{
+//		GameObject[] children;
+//		int targetX = pusher.GetComponent<CubeBehaviorScript> ().thisX, targetY = pusher.GetComponent<CubeBehaviorScript> ().thisY;
+//		CastRayFromPusher1();
+//		CastRayFromPusher2();
+//	}
 
 	void CastRayFromPusher1 ()
 	{
 		if (pusherCube1) {
 			//if(pusherCube2Location =
 			//Get location in Pusher Array	
-			if ((pusherCube1Location == 20) ||
+			if ((pusherCube1Location ==19) ||
+				(pusherCube1Location == 20) ||
 					(pusherCube1Location == 21) ||
 					(pusherCube1Location == 22) ||
 					(pusherCube1Location == 23) ||
 					(pusherCube1Location == 24) ||
 					(pusherCube1Location == 25) ||
-					(pusherCube1Location == 26) ||
 					(pusherCube1Location == 0)) {
 				//Parent cubes down and move all cubes in this row down 2 spaces
 				print ("PusherCube1 is in the top row");
-				if (pusherCube1Location == 20) {
+				if(pusherCube1Location == 19){
 					xToShootRayFrom1 = -14;
 					yToShootRayFrom1 = 2;
+					ShootRayDown();
+				}
+				if (pusherCube1Location == 20) {
+					xToShootRayFrom1 = -12;
+					yToShootRayFrom1 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube1Location == 21) {
-					xToShootRayFrom1 = - 12;
+					xToShootRayFrom1 = - 10;
 					yToShootRayFrom1 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube1Location == 22) {
-					xToShootRayFrom1 = -10;
-					yToShootRayFrom1 = 2;
-				}
-				if (pusherCube1Location == 23) {
 					xToShootRayFrom1 = -8;
 					yToShootRayFrom1 = 2;
+					ShootRayDown();
+					//Shoot Ray Down
 				}
-				if (pusherCube1Location == 24) {
+				if (pusherCube1Location == 23) {
 					xToShootRayFrom1 = -6;
 					yToShootRayFrom1 = 2;
+					ShootRayDown();
 				}
-				if (pusherCube1Location == 25) {
+				if (pusherCube1Location == 24) {
 					xToShootRayFrom1 = -4;
 					yToShootRayFrom1 = 2;
+					ShootRayDown();
+				}
+				if (pusherCube1Location == 25) {
+					xToShootRayFrom1 = -2;
+					yToShootRayFrom1 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube1Location == 26) {
 					xToShootRayFrom1 = -2;
 					yToShootRayFrom1 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube1Location == 0) {
 					xToShootRayFrom1 = 0;
 					yToShootRayFrom1 = 2;
+					ShootRayDown();
 				}
 			}
-			if ((pusherCube1Location == 19) ||
-					(pusherCube1Location == 18) ||
+			if ((pusherCube1Location == 18) ||
 					(pusherCube1Location == 17) ||
 					(pusherCube1Location == 16) ||
 					(pusherCube1Location == 15) ||
@@ -588,28 +616,34 @@ public class GameControllerScript2 : MonoBehaviour
 				//Parent cubes right and move all cubes in this row right 2 spaces
 				print ("PusherCube1 is in the left row");
 				if (pusherCube1Location == 19) {
-					xToShootRayFrom1 = -16;
-					yToShootRayFrom1 = 0;
+					xToShootRayFrom1 = -14;
+					yToShootRayFrom1 = 2;
+					ShootRayRight();
 				}
 				if (pusherCube1Location == 18) {
 					xToShootRayFrom1 = -16;
-					yToShootRayFrom1 = -2;
+					yToShootRayFrom1 = 0;
+					ShootRayRight();
 				}
 				if (pusherCube1Location == 17) {
 					xToShootRayFrom1 = -16;
 					yToShootRayFrom1 = -2;
+					ShootRayRight();
 				}
 				if (pusherCube1Location == 16) {
 					xToShootRayFrom1 = -16;
 					yToShootRayFrom1 = -4;
+					ShootRayRight();
 				}
 				if (pusherCube1Location == 15) {
 					xToShootRayFrom1 = -16;
 					yToShootRayFrom1 = -6;
+					ShootRayRight();
 				}
 				if (pusherCube1Location == 14) {
 					xToShootRayFrom1 = -16;
 					yToShootRayFrom1 = -8;
+					ShootRayRight();
 				}
 			}
 			if ((pusherCube1Location == 13) ||
@@ -625,34 +659,42 @@ public class GameControllerScript2 : MonoBehaviour
 				if (pusherCube1Location == 13) {
 					xToShootRayFrom1 = -14;
 					yToShootRayFrom1 = -10;
+					ShootRayUp ();
 				}
 				if (pusherCube1Location == 12) {
 					xToShootRayFrom1 = -12;
 					yToShootRayFrom1 = -10;
+					ShootRayUp ();
 				}
 				if (pusherCube1Location == 11) {
 					xToShootRayFrom1 = -10;
 					yToShootRayFrom1 = -10;
+					ShootRayUp ();
 				}
 				if (pusherCube1Location == 10) {
 					xToShootRayFrom1 = -8;
 					yToShootRayFrom1 = -10;
+					ShootRayUp ();
 				}
 				if (pusherCube1Location == 9) {
 					xToShootRayFrom1 = -6;
 					yToShootRayFrom1 = -10;
+					ShootRayUp ();
 				}
 				if (pusherCube1Location == 8) {
 					xToShootRayFrom1 = -4;
 					yToShootRayFrom1 = -10;
+					ShootRayUp ();
 				}
 				if (pusherCube1Location == 7) {
 					xToShootRayFrom1 = -2;
 					yToShootRayFrom1 = -10;
+					ShootRayUp ();
 				}
 				if (pusherCube1Location == 6) {
 					xToShootRayFrom1 = 0;
 					yToShootRayFrom1 = -10;
+					ShootRayUp ();
 				}
 			}
 			if ((pusherCube1Location == 5) ||
@@ -665,22 +707,27 @@ public class GameControllerScript2 : MonoBehaviour
 				if (pusherCube1Location == 5) {
 					xToShootRayFrom1 = 2;
 					yToShootRayFrom1 = -8;
+					ShootRayLeft ();
 				}
 				if (pusherCube1Location == 4) {
 					xToShootRayFrom1 = 2;
 					yToShootRayFrom1 = -6;
+					ShootRayLeft ();
 				}
 				if (pusherCube1Location == 3) {
 					xToShootRayFrom1 = 2;
 					yToShootRayFrom1 = -4;
+					ShootRayLeft ();
 				}
 				if (pusherCube1Location == 2) {
 					xToShootRayFrom1 = 2;
 					yToShootRayFrom1 = -2;
+					ShootRayLeft ();
 				}
 				if (pusherCube1Location == 1) {
 					xToShootRayFrom1 = 2;
 					yToShootRayFrom1 = 0;
+					ShootRayLeft ();
 				}
 			}
 		}
@@ -704,34 +751,42 @@ public class GameControllerScript2 : MonoBehaviour
 				if (pusherCube2Location == 20) {
 					xToShootRayFrom2 = -14;
 					yToShootRayFrom2 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube2Location == 21) {
 					xToShootRayFrom2 = - 12;
 					yToShootRayFrom2 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube2Location == 22) {
 					xToShootRayFrom2 = -10;
 					yToShootRayFrom2 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube2Location == 23) {
 					xToShootRayFrom2 = -8;
 					yToShootRayFrom2 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube2Location == 24) {
 					xToShootRayFrom2 = -6;
 					yToShootRayFrom2 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube2Location == 25) {
 					xToShootRayFrom2 = -4;
 					yToShootRayFrom2 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube2Location == 26) {
 					xToShootRayFrom2 = -2;
 					yToShootRayFrom2 = 2;
+					ShootRayDown();
 				}
 				if (pusherCube2Location == 0) {
 					xToShootRayFrom2 = 0;
 					yToShootRayFrom2 = 2;
+					ShootRayDown();
 				}
 			}
 			if ((pusherCube2Location == 19) ||
@@ -745,26 +800,32 @@ public class GameControllerScript2 : MonoBehaviour
 				if (pusherCube2Location == 19) {
 					xToShootRayFrom2 = -16;
 					yToShootRayFrom2 = 0;
+					ShootRayRight();
 				}
 				if (pusherCube2Location == 18) {
 					xToShootRayFrom2 = -16;
 					yToShootRayFrom2 = -2;
+					ShootRayRight();
 				}
 				if (pusherCube2Location == 17) {
 					xToShootRayFrom2 = -16;
 					yToShootRayFrom2 = -4;
+					ShootRayRight();
 				}
 				if (pusherCube2Location == 16) {
 					xToShootRayFrom2 = -16;
 					yToShootRayFrom2 = -6;
+					ShootRayRight();
 				}
 				if (pusherCube2Location == 15) {
 					xToShootRayFrom2 = -16;
 					yToShootRayFrom2 = -8;
+					ShootRayRight();
 				}
 				if (pusherCube2Location == 14) {
 					xToShootRayFrom2 = -16;
 					yToShootRayFrom2 = -8;
+					ShootRayRight();
 				}
 			}
 			if ((pusherCube2Location == 13) ||
@@ -780,34 +841,42 @@ public class GameControllerScript2 : MonoBehaviour
 				if (pusherCube2Location == 13) {
 					xToShootRayFrom2 = -14;
 					yToShootRayFrom2 = -10;
+					ShootRayUp();
 				}
 				if (pusherCube2Location == 12) {
 					xToShootRayFrom2 = -12;
 					yToShootRayFrom2 = -10;
+					ShootRayUp();
 				}
 				if (pusherCube2Location == 11) {
 					xToShootRayFrom2 = -10;
 					yToShootRayFrom2 = -10;
+					ShootRayUp();
 				}
 				if (pusherCube2Location == 10) {
 					xToShootRayFrom2 = -8;
 					yToShootRayFrom2 = -10;
+					ShootRayUp();
 				}
 				if (pusherCube2Location == 9) {
 					xToShootRayFrom2 = -6;
 					yToShootRayFrom2 = -10;
+					ShootRayUp();
 				}
 				if (pusherCube2Location == 8) {
 					xToShootRayFrom2 = -4;
 					yToShootRayFrom2 = -10;
+					ShootRayUp();
 				}
 				if (pusherCube2Location == 7) {
 					xToShootRayFrom2 = -2;
 					yToShootRayFrom2 = -10;
+					ShootRayUp();
 				}
 				if (pusherCube2Location == 6) {
 					xToShootRayFrom2 = 0;
 					yToShootRayFrom2 = -10;
+					ShootRayUp();
 				}
 			}
 			if ((pusherCube2Location == 5) ||
@@ -820,28 +889,79 @@ public class GameControllerScript2 : MonoBehaviour
 				if (pusherCube2Location == 5) {
 					xToShootRayFrom2 = 2;
 					yToShootRayFrom2 = -8;
+					ShootRayLeft ();
 				}
 				if (pusherCube2Location == 4) {
 					xToShootRayFrom2 = 2;
 					yToShootRayFrom2 = -6;
+					ShootRayLeft ();
 				}
 				if (pusherCube2Location == 3) {
 					xToShootRayFrom2 = 2;
 					yToShootRayFrom2 = -4;
+					ShootRayLeft ();
 				}
 				if (pusherCube2Location == 2) {
 					xToShootRayFrom2 = 2;
 					yToShootRayFrom2 = -2;
+					ShootRayLeft ();
 				}
 				if (pusherCube2Location == 1) {
 					xToShootRayFrom2 = 2;
 					yToShootRayFrom2 = 0;
+					ShootRayLeft ();
 				}
 			}
 		}
 		
 	}
 	
+	void ShootDemRays(){
+	if(pusherCube1){	
+		CastRayFromPusher1 ();
+				
+		}
+	if(pusherCube2){	
+		CastRayFromPusher2 ();	
+		}
+	}
 	
+	void ShootRayUp(){
+		
+		
+}	
+	
+	void ShootRayDown(){
+		
+		var Location1 = new Vector3(xToShootRayFrom1,yToShootRayFrom1, 10);
+		var Location2 = new Vector3(hitX,hitY, 10);
+		var Location3 = new Vector3(hitX,hitY, 10);
+		var Location4 = new Vector3(hitX,hitY, 10);
+		
+		directionToShoot=Vector3.down;
+		var DirectionToShoot = directionToShoot;
+		var HitCube = new Vector3(hitX,hitY);
+		if(pusherCube1 && Location1== pusherCube1.transform.position){
+			if(Physics.Raycast(Location1, directionToShoot, out hit)){
+				hitX = hit.transform.gameObject.transform.position.x;
+				hitY = hit.transform.gameObject.transform.position.y;
+				if(HitCube!=Location1){
+					if(Physics.Raycast(Location1, directionToShoot, out hit)){
+						
+					}
+				}
+			}
+			Debug.DrawRay(Location1,directionToShoot);
+			Debug.DrawRay(Location2,directionToShoot);	
+		}
+}
+	
+	void ShootRayRight(){
+		
+}
+	
+	void ShootRayLeft(){
+		
+}
 	
 }
